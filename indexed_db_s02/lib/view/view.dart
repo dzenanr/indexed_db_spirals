@@ -1,9 +1,11 @@
 part of indexed_db;
 
 class TasksView {
+  TasksStore tasksStore;
+
   Element _taskElements;
 
-  TasksView(TasksStore tasksStore) {
+  TasksView(this.tasksStore) {
     _taskElements = query('#task-list');
 
     InputElement newTask = query('#new-task');
@@ -30,6 +32,7 @@ class TasksView {
   Element _newElement(Task task) {
     return new Element.html('''
         <li>
+          <button class='task-button remove-task'>X</button>
           ${task.title}
         </li>
     ''');
@@ -37,6 +40,11 @@ class TasksView {
 
   _addElement(Task task) {
     var taskElement = _newElement(task);
+    taskElement.query('.remove-task').onClick.listen((MouseEvent e) {
+      tasksStore.remove(task).then((_) {
+        _taskElements.nodes.remove(taskElement);
+      });
+    });
     _taskElements.nodes.add(taskElement);
   }
 

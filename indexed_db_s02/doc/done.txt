@@ -3,6 +3,8 @@ Done
 + create index on title
 + remove task from db
 
++ remove task from view
+
 
 
 

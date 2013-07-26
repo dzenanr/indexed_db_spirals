@@ -1,8 +1,9 @@
 To Do
 
-- refine the model
-- remove a task
-- edit a task
+- refine model
+
+- remove task
+- edit task
 
 
 
