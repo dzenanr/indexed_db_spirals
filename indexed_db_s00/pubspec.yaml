@@ -1,0 +1,6 @@
+name: indexed_db
+version: 0.0.0
+author: Dzenan Ridjanovic <dzenanr@gmail.com>
+homepage: http://ondart.me/
+dependencies:
+  browser: any
