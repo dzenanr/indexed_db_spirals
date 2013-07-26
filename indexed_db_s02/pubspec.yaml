@@ -1,5 +1,5 @@
 name: indexed_db
-version: 0.0.0
+version: 0.0.2
 author: Dzenan Ridjanovic <dzenanr@gmail.com>
 description: Spirals to learn how to use IndexedDB.
 homepage: http://ondart.me/

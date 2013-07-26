@@ -24,14 +24,13 @@ class Task {
 }
 
 class TasksStore {
-  static const String TASK_STORE = 'taskStore';
-  static const String TITLE_INDEX = 'titleIndex';
+  static const String TASKS_STORE = 'tasksStore';
 
   final List<Task> tasks = new List();
   Database _db;
 
   Future open() {
-    return window.indexedDB.open('taskDb',
+    return window.indexedDB.open('tasksDb00',
         version: 1,
         onUpgradeNeeded: _initDb)
       .then(_loadDb);
@@ -39,15 +38,13 @@ class TasksStore {
 
   void _initDb(VersionChangeEvent e) {
     var db = (e.target as Request).result;
-    var objectStore = db.createObjectStore(TASK_STORE,
-        autoIncrement: true);
-    objectStore.createIndex(TITLE_INDEX, 'title', unique: true);
+    var objectStore = db.createObjectStore(TASKS_STORE, autoIncrement: true);
   }
 
   Future _loadDb(Database db) {
     _db = db;
-    var trans = db.transaction(TASK_STORE, 'readonly');
-    var store = trans.objectStore(TASK_STORE);
+    var trans = db.transaction(TASKS_STORE, 'readonly');
+    var store = trans.objectStore(TASKS_STORE);
 
     var cursors = store.openCursor(autoAdvance: true).asBroadcastStream();
     cursors.listen((cursor) {
@@ -63,8 +60,8 @@ class TasksStore {
     var task = new Task(title);
     var taskMap = task.toDb();
 
-    var transaction = _db.transaction(TASK_STORE, 'readwrite');
-    var objectStore = transaction.objectStore(TASK_STORE);
+    var transaction = _db.transaction(TASKS_STORE, 'readwrite');
+    var objectStore = transaction.objectStore(TASKS_STORE);
 
     objectStore.add(taskMap).then((addedKey) {
       task.key = addedKey;
@@ -76,19 +73,9 @@ class TasksStore {
     });
   }
 
-  Future remove(Task task) {
-    var transaction = _db.transaction(TASK_STORE, 'readwrite');
-    transaction.objectStore(TASK_STORE).delete(task.key);
-
-    return transaction.completed.then((_) {
-      task.key = null;
-      tasks.remove(task);
-    });
-  }
-
   Future clear() {
-    var transaction = _db.transaction(TASK_STORE, 'readwrite');
-    transaction.objectStore(TASK_STORE).clear();
+    var transaction = _db.transaction(TASKS_STORE, 'readwrite');
+    transaction.objectStore(TASKS_STORE).clear();
 
     return transaction.completed.then((_) {
       tasks.clear();

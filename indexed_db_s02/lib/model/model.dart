@@ -1,6 +1,4 @@
-import 'dart:async';
-import 'dart:html';
-import 'dart:indexed_db';
+part of indexed_db;
 
 class Task {
   String title;
@@ -27,12 +25,13 @@ class Task {
 
 class TasksStore {
   static const String TASKS_STORE = 'tasksStore';
+  static const String TITLE_INDEX = 'titleIndex';
 
   final List<Task> tasks = new List();
   Database _db;
 
   Future open() {
-    return window.indexedDB.open('tasksDb00',
+    return window.indexedDB.open('tasksDb02',
         version: 1,
         onUpgradeNeeded: _initDb)
       .then(_loadDb);
@@ -41,6 +40,7 @@ class TasksStore {
   void _initDb(VersionChangeEvent e) {
     var db = (e.target as Request).result;
     var objectStore = db.createObjectStore(TASKS_STORE, autoIncrement: true);
+    objectStore.createIndex(TITLE_INDEX, 'title', unique: true);
   }
 
   Future _loadDb(Database db) {
@@ -72,6 +72,16 @@ class TasksStore {
     return transaction.completed.then((_) {
       tasks.add(task);
       return task;
+    });
+  }
+
+  Future remove(Task task) {
+    var transaction = _db.transaction(TASKS_STORE, 'readwrite');
+    transaction.objectStore(TASKS_STORE).delete(task.key);
+
+    return transaction.completed.then((_) {
+      task.key = null;
+      tasks.remove(task);
     });
   }
 

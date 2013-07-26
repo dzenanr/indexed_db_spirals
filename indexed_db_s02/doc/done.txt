@@ -1,0 +1,8 @@
+Done
+
++ create index on title
++ remove task from db
+
+
+
+

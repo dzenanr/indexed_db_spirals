@@ -2,7 +2,7 @@ import 'dart:html';
 import 'model.dart';
 
 Element taskElements;
-TaskStore taskStore;
+TasksStore tasksStore;
 
 Element newElement(Task task) {
   return new Element.html('''
@@ -29,9 +29,9 @@ clearElements() {
 
 main() {
   taskElements = query('#task-list');
-  taskStore = new TaskStore();
-  taskStore.open().then((_) {
-    loadElements(taskStore.tasks);
+  tasksStore = new TasksStore();
+  tasksStore.open().then((_) {
+    loadElements(tasksStore.tasks);
   });
 
   InputElement newTask = query('#new-task');
@@ -39,7 +39,7 @@ main() {
     if (e.keyCode == KeyCode.ENTER) {
       var title = newTask.value.trim();
       if (title != '') {
-        taskStore.add(title).then((task) {
+        tasksStore.add(title).then((task) {
           addElement(task);
         });
         newTask.value = '';
@@ -47,9 +47,9 @@ main() {
     }
   });
 
-  ButtonElement clear = query('#clear');
+  ButtonElement clear = query('#clear-tasks');
   clear.onClick.listen((MouseEvent e) {
-    taskStore.clear().then((_) {
+    tasksStore.clear().then((_) {
       clearElements();
     });
   });
