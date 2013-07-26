@@ -1,0 +1,7 @@
+Done
+
++ organize code
++ create TasksView class
++ add css
+
+
