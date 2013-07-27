@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Tasks with IndexedDb</title>
+  <link rel="stylesheet" href="css/base.css">
+</head>
+<body>
+  <section>
+    <header>
+      <h1 class="app-title">Tasks</h1>
+    </header>
+    <section id="tasks">
+      <input id="new-task" placeholder="What needs to be done?" autofocus>
+      <ul id="task-list"></ul>
+    </section>
+    <footer class="footer">
+      <button id="clear-tasks" class="task-button">Clear tasks</button>
+    </footer>
+  </section>
+  <footer class="info">
+    <p>Based on
+      <a href="http://www.dartlang.org/docs/tutorials/indexeddb/">
+        Target 11: Use IndexedDB
+      </a>
+    </p>
+  </footer>
+
+  <script type="application/dart" src="app.dart"></script>
+  <script src="packages/browser/dart.js"></script>
+</body>
+</html>

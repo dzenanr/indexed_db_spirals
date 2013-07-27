@@ -1,9 +1,10 @@
 Done
 
-+ create index on title
 + remove task from db
++ update task in db
 
 + remove task from view
++ complete task in view
 
 
 

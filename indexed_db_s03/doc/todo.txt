@@ -1,0 +1,9 @@
+To Do
+
+- complete all tasks
+- display in footer how many tasks are still active (left to do)
+- display in Clear completed button how many tasks are completed
+- display all, active or completed tasks
+
+
+

@@ -1,6 +1,11 @@
 To Do
 
-- ?
+- create index on title
+
+- clear only completed tasks
+- edit task title
+- display error if task title is not unique (new or edit)
+
 
 
 
