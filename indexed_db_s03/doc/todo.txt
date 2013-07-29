@@ -1,8 +1,9 @@
 To Do
 
-- complete all tasks
-- display in footer how many tasks are still active (left to do)
-- display in Clear completed button how many tasks are completed
+- reorganize model
+
+- edit task title
+- display error if task title is not unique (new or edit)
 - display all, active or completed tasks
 
 

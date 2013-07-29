@@ -1,6 +1,7 @@
 To Do
 
 - create index on title
+- reorganize model
 
 - clear only completed tasks
 - edit task title
