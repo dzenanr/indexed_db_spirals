@@ -1,6 +1,6 @@
 To Do
 
-- test indexed db
+- test indexed db (IndexedDB uses window from dart:html)
 
 
 

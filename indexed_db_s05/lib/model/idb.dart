@@ -11,10 +11,9 @@ class TasksDb {
   TasksStore get tasksStore => _tasksStore;
 
   Future open() {
-    return window.indexedDB.open('tasksDb03',
-        version: 1,
-        onUpgradeNeeded: _initDb)
-      .then(_loadDb);
+    return window.indexedDB
+        .open('tasksDb03',version: 1, onUpgradeNeeded: _initDb)
+        .then(_loadDb);
   }
 
   void _initDb(VersionChangeEvent e) {
