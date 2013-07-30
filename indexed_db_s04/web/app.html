@@ -9,7 +9,7 @@
 <body>
   <section>
     <header>
-      <h1 class="app-title">Tasks</h1>
+      <h1 class="app-title">tasks</h1>
     </header>
     <section id="tasks">
       <input id="new-task" placeholder="What needs to be done?" autofocus>
@@ -20,6 +20,17 @@
     </section>
     <footer class="footer">
       <span id="active-tasks-count"><strong>0</strong> active tasks</span>
+      <ul id="filter">
+        <li>
+          <a class="selected" href="#/">All</a>
+        </li>
+        <li>
+          <a href="#/active">Active</a>
+        </li>
+        <li>
+          <a href="#/completed">Completed</a>
+        </li>
+      </ul>
       <button id="clear-completed-tasks" class="task-button">
         Clear completed
       </button>
@@ -29,6 +40,10 @@
     <p>Based on
       <a href="http://www.dartlang.org/docs/tutorials/indexeddb/">
         Target 11: Use IndexedDB
+      </a>
+      <br/>
+      <a href="https://github.com/dzenanr/indexed_db_spirals">
+        Source code
       </a>
     </p>
   </footer>

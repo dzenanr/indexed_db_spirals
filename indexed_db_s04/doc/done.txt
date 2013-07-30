@@ -1,14 +1,10 @@
 Done
 
-+ create index on title
++ find task by using title index
 
-+ remove Clear tasks button
-+ add Clear completed button
-+ display in footer how many tasks are still active (left to do)
-+ display in Clear completed button how many tasks are completed
-+ when there are no tasks, footer is not displayed
-+ when there are no completed tasks, Clear completed button is not displayed
-+ add checkbox to complete all tasks
++ edit task title
++ display error if task title is not unique (new or edit)
++ display all, active or completed tasks
 
 
 

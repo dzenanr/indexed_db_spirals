@@ -1,6 +1,7 @@
 To Do
 
-- ?
+- reorganize model
+- test model
 
 
 

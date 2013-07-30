@@ -14,6 +14,12 @@ class Task {
     completed = value['completed'] == 'true' ? true : false {
   }
 
+  Task.fromDbWoutKey(Map value):
+    title = value['title'],
+    updated = DateTime.parse(value['updated']),
+    completed = value['completed'] == 'true' ? true : false {
+  }
+
   Map toDb() {
     return {
       'title': title,
@@ -30,7 +36,7 @@ class TasksStore {
   final List<Task> tasks = new List();
   Database _db;
 
-  List<Task> get completedTasks {
+  List<Task> get completed {
     var completed = new List<Task>();
     for (var task in tasks) {
       if (task.completed) {
@@ -40,7 +46,7 @@ class TasksStore {
     return completed;
   }
 
-  List<Task> get activeTasks {
+  List<Task> get active {
     var active = new List<Task>();
     for (var task in tasks) {
       if (!task.completed) {
@@ -85,12 +91,11 @@ class TasksStore {
     var trans = _db.transaction(TASKS_STORE, 'readwrite');
     var store = trans.objectStore(TASKS_STORE);
 
-    store.add(taskMap).then((addedKey) {
+    var future = store.add(taskMap).then((addedKey) {
       task.key = addedKey;
-    });
-
-    return trans.completed.then((_) {
       tasks.add(task);
+    });
+    return future.then((_) {
       return task;
     });
   }
@@ -98,11 +103,22 @@ class TasksStore {
   Future update(Task task) {
     var taskMap = task.toDb();
     var trans = _db.transaction(TASKS_STORE, 'readwrite');
-    trans.objectStore(TASKS_STORE).put(taskMap, task.key);
-    return trans.completed;
+    var future = trans.objectStore(TASKS_STORE).put(taskMap, task.key);
+    return future;
   }
 
-  Future completeTasks() {
+  Future<Task> find(String title) {
+    var trans = _db.transaction(TASKS_STORE, 'readonly');
+    var store = trans.objectStore(TASKS_STORE);
+    var index = store.index(TITLE_INDEX);
+    var future = index.get(title);
+    return future.then((taskMap) {
+      var task = new Task.fromDbWoutKey(taskMap);
+      return task;
+    });
+  }
+
+  Future complete() {
     Future future;
     for (var task in tasks) {
       if (!task.completed) {
@@ -117,14 +133,13 @@ class TasksStore {
   Future remove(Task task) {
     var trans = _db.transaction(TASKS_STORE, 'readwrite');
     trans.objectStore(TASKS_STORE).delete(task.key);
-
     return trans.completed.then((_) {
       task.key = null;
       tasks.remove(task);
     });
   }
 
-  Future removeCompletedTasks() {
+  Future removeCompleted() {
     Future future;
     for (var task in tasks) {
       if (task.completed) {
@@ -137,7 +152,6 @@ class TasksStore {
   Future clear() {
     var trans = _db.transaction(TASKS_STORE, 'readwrite');
     trans.objectStore(TASKS_STORE).clear();
-
     return trans.completed.then((_) {
       tasks.clear();
     });
