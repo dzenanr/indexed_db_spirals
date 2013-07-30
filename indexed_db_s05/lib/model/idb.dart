@@ -39,6 +39,8 @@ class TasksStore {
 
   TasksStore(this.todo);
 
+  bool get isEmpty => tasks.length == 0;
+
   Future<int> load() {
     var trans = todo.db.transaction(TasksDb.TASKS_STORE, READ_ONLY);
     var store = trans.objectStore(TasksDb.TASKS_STORE);
