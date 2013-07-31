@@ -12,8 +12,8 @@ class TasksDb {
 
   Future open() {
     return window.indexedDB
-        .open('tasksDb03',version: 1, onUpgradeNeeded: _initDb)
-        .then(_loadDb);
+      .open('tasksDb03',version: 1, onUpgradeNeeded: _initDb)
+      .then(_loadDb);
   }
 
   void _initDb(VersionChangeEvent e) {
@@ -48,9 +48,10 @@ class TasksStore {
       var task = new Task.fromDb(cursor.key, cursor.value);
       tasks.add(task);
     });
-    return cursor.length.then((_) {
-      return tasks.length;
-    });
+    return cursor.length
+      .then((_) {
+        return tasks.length;
+      });
   }
 
   Future<Task> add(String title) {
@@ -59,31 +60,33 @@ class TasksStore {
 
     var trans = todo.db.transaction(TasksDb.TASKS_STORE, READ_WRITE);
     var store = trans.objectStore(TasksDb.TASKS_STORE);
-    var future = store.add(taskMap).then((addedKey) {
-      task.key = addedKey;
-      tasks.add(task);
-    });
-    return future.then((_) {
-      return task;
-    });
+    var future = store.add(taskMap)
+      .then((addedKey) {
+        task.key = addedKey;
+        tasks.add(task);
+      });
+    return future
+      .then((_) {
+        return task;
+      });
   }
 
   Future update(Task task) {
     var taskMap = task.toDb();
     var trans = todo.db.transaction(TasksDb.TASKS_STORE, READ_WRITE);
     var store = trans.objectStore(TasksDb.TASKS_STORE);
-    var future = store.put(taskMap, task.key);
-    return future;
+    return store.put(taskMap, task.key);
   }
 
   Future<Task> find(String title) {
     var trans = todo.db.transaction(TasksDb.TASKS_STORE, READ_ONLY);
     var store = trans.objectStore(TasksDb.TASKS_STORE);
     var future = store.index(TasksDb.TITLE_INDEX).get(title);
-    return future.then((taskMap) {
-      var task = new Task.fromDbWoutKey(taskMap);
-      return task;
-    });
+    return future
+      .then((taskMap) {
+        var task = new Task.fromDbWoutKey(taskMap);
+        return task;
+      });
   }
 
   Future complete() {
@@ -102,10 +105,11 @@ class TasksStore {
     var trans = todo.db.transaction(TasksDb.TASKS_STORE, READ_WRITE);
     var store = trans.objectStore(TasksDb.TASKS_STORE);
     store.delete(task.key);
-    return trans.completed.then((_) {
-      task.key = null;
-      tasks.remove(task);
-    });
+    return trans.completed
+      .then((_) {
+        task.key = null;
+        tasks.remove(task);
+      });
   }
 
   Future removeCompleted() {
@@ -122,8 +126,9 @@ class TasksStore {
     var trans = todo.db.transaction(TasksDb.TASKS_STORE, READ_WRITE);
     var store = trans.objectStore(TasksDb.TASKS_STORE);
     store.clear();
-    return trans.completed.then((_) {
-      tasks.clear();
-    });
+    return trans.completed
+      .then((_) {
+        tasks.clear();
+      });
   }
 }

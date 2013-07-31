@@ -57,9 +57,8 @@ class TasksStore {
   }
 
   Future open() {
-    return window.indexedDB.open('tasksDb03',
-        version: 1,
-        onUpgradeNeeded: _initDb)
+    return window.indexedDB
+      .open('tasksDb03', version: 1, onUpgradeNeeded: _initDb)
       .then(_loadDb);
   }
 
@@ -79,9 +78,10 @@ class TasksStore {
       var task = new Task.fromDb(cursor.key, cursor.value);
       tasks.add(task);
     });
-    return cursor.length.then((_) {
-      return tasks.length;
-    });
+    return cursor.length
+      .then((_) {
+        return tasks.length;
+      });
   }
 
   Future<Task> add(String title) {
@@ -91,13 +91,15 @@ class TasksStore {
     var trans = _db.transaction(TASKS_STORE, 'readwrite');
     var store = trans.objectStore(TASKS_STORE);
 
-    var future = store.add(taskMap).then((addedKey) {
-      task.key = addedKey;
-      tasks.add(task);
-    });
-    return future.then((_) {
-      return task;
-    });
+    var future = store.add(taskMap)
+      .then((addedKey) {
+        task.key = addedKey;
+        tasks.add(task);
+      });
+    return future
+      .then((_) {
+        return task;
+      });
   }
 
   Future update(Task task) {
@@ -112,10 +114,11 @@ class TasksStore {
     var store = trans.objectStore(TASKS_STORE);
     var index = store.index(TITLE_INDEX);
     var future = index.get(title);
-    return future.then((taskMap) {
-      var task = new Task.fromDbWoutKey(taskMap);
-      return task;
-    });
+    return future
+      .then((taskMap) {
+        var task = new Task.fromDbWoutKey(taskMap);
+        return task;
+      });
   }
 
   Future complete() {
@@ -133,10 +136,11 @@ class TasksStore {
   Future remove(Task task) {
     var trans = _db.transaction(TASKS_STORE, 'readwrite');
     trans.objectStore(TASKS_STORE).delete(task.key);
-    return trans.completed.then((_) {
-      task.key = null;
-      tasks.remove(task);
-    });
+    return trans.completed
+      .then((_) {
+        task.key = null;
+        tasks.remove(task);
+      });
   }
 
   Future removeCompleted() {
@@ -152,8 +156,9 @@ class TasksStore {
   Future clear() {
     var trans = _db.transaction(TASKS_STORE, 'readwrite');
     trans.objectStore(TASKS_STORE).clear();
-    return trans.completed.then((_) {
-      tasks.clear();
-    });
+    return trans.completed
+      .then((_) {
+        tasks.clear();
+      });
   }
 }

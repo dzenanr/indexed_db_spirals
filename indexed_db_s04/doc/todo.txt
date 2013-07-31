@@ -3,5 +3,10 @@ To Do
 - reorganize model
 - test model
 
+- invalid CSS property names:
+  -- Invalid CSS property name: -webkit-touch-callout
+  -- Invalid CSS property name: font-smoothing
+  -- Invalid CSS property name: -webkit-text-rendering
+
 
 

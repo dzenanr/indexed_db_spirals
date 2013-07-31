@@ -27,24 +27,26 @@ class TasksView {
       if (e.keyCode == KeyCode.ENTER) {
         var title = newTask.value.trim();
         if (title != '') {
-          _tasksStore.add(title).then((task) {
-            _addElement(task);
-            newTask.value = '';
-            _updateFilter();
-          })
-          .catchError((e) {
-            newTask.value = '${title} : title not unique';
-            newTask.select();
-          });
+          _tasksStore.add(title)
+            .then((task) {
+              _addElement(task);
+              newTask.value = '';
+              _updateFilter();
+            })
+            .catchError((e) {
+              newTask.value = '${title} : title not unique';
+              newTask.select();
+            });
         }
       }
     });
 
     _clearCompletedTasks.onClick.listen((MouseEvent e) {
-      _tasksStore.removeCompleted().then((_) {
-        _clearElements();
-        loadElements(_tasksStore.tasks);
-      });
+      _tasksStore.removeCompleted()
+        .then((_) {
+          _clearElements();
+          loadElements(_tasksStore.tasks);
+        });
     });
   }
 
@@ -77,26 +79,28 @@ class TasksView {
         if (value != '') {
           task.title = value;
           task.updated = new DateTime.now();
-          _tasksStore.update(task).then((_) {
-            title.text = value;
-            title.hidden = false;
-            editTitle.hidden = true;
-            _updateDisplay();
-          })
-          .catchError((e) {
-            editTitle.value =
-              '${title.text} (old) ${editTitle.value} (new) : title not unique';
-            editTitle.select();
-          });
+          _tasksStore.update(task)
+            .then((_) {
+              title.text = value;
+              title.hidden = false;
+              editTitle.hidden = true;
+              _updateDisplay();
+            })
+            .catchError((e) {
+              editTitle.value =
+                '${title.text} (old) ${editTitle.value} (new) : title not unique';
+              editTitle.select();
+            });
         }
       }
     });
 
     taskElement.query('.remove-task').onClick.listen((MouseEvent e) {
-      _tasksStore.remove(task).then((_) {
-        _taskElements.nodes.remove(taskElement);
-        _updateDisplay();
-      });
+      _tasksStore.remove(task)
+        .then((_) {
+          _taskElements.nodes.remove(taskElement);
+          _updateDisplay();
+        });
     });
 
     taskElement.query('.task-completed').onClick.listen((MouseEvent e) {
@@ -139,41 +143,18 @@ class TasksView {
 
   _showAll() {
     _setSelectedFilter(_allElements);
-    /*
-    for (var element in _taskElements.children) {
-      element.hidden = false;
-    }
-    */
     _clearElements();
     loadElements(_tasksStore.tasks);
   }
 
   _showActive() {
     _setSelectedFilter(_activeElements);
-    /*
-    for (var element in _taskElements.children) {
-      Element titleLabel = element.query('.task-title');
-      String title = titleLabel.text;
-      _tasksStore.find(title).then((task) {
-        element.hidden = task.completed;
-      });
-    }
-    */
     _clearElements();
     loadElements(_tasksStore.tasks.active);
   }
 
   _showCompleted() {
     _setSelectedFilter(_completedElements);
-    /*
-    for (LIElement element in _taskElements.children) {
-      Element titleLabel = element.query('.task-title');
-      String title = titleLabel.text;
-      _tasksStore.find(title).then((task) {
-        element.hidden = !task.completed;
-      });
-    }
-    */
     _clearElements();
     loadElements(_tasksStore.tasks.completed);
   }
