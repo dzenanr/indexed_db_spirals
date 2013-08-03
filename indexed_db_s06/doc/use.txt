@@ -1,0 +1,10 @@
+Use
+
+1. run server first (lib/server/server.dart) in Dart Editor:
+   it runs when you see in the server.dart tab in Dart Editor: Listening for GET and POST on http://127.0.0.1:8080
+   if it does not run, use Run/Manage Launches
+2. run client second (web/app.html) in Dartium
+3. use the tasks app in Dartium:
+   3.1 From server to get server data locally
+   3.2 add, remove and update tasks (saved locally in IndexedDB by default)
+   3.3 To server to save local data to server

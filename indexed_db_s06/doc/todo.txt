@@ -1,0 +1,23 @@
+To Do
+
+- test indexed db (IndexedDB uses window from dart:html)
+
+- invalid CSS property names:
+  -- Invalid CSS property name: -webkit-touch-callout
+  -- Invalid CSS property name: font-smoothing
+  -- Invalid CSS property name: -webkit-text-rendering
+
+- resolve:
+  Uncaught Error: Instance of 'Event'
+  Exception: Instance of 'Event'
+  
+- To server (POST) adds tasks without conflicting titles to data on the server
+- From server (GET) removes tasks with conflicting titles from local data and
+  adds tasks without conflicting titles to local data
+- test 2 clients with the server
+
+
+  
+
+
+

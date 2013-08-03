@@ -1,0 +1,21 @@
+Done
+
++ client-server
++ server does not save data in a real database
++ server keeps data in memory while it is running
++ client uses locally IndexedDB
++ client starts by loading data from IndexedDB
++ local data saved in IndexedDB by default
++ client has 2 buttons: To server and From server
++ To server (POST) overrides data on the server
++ From server (GET) overrides local data
+
+
+
+
+
+
+
+
+
+
