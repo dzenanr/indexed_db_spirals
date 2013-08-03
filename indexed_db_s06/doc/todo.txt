@@ -11,7 +11,7 @@ To Do
   Uncaught Error: Instance of 'Event'
   Exception: Instance of 'Event'
   
-- To server (POST) adds tasks without conflicting titles to data on the server
+- To server (POST) adds local tasks without conflicting titles to data on the server
 - From server (GET) removes tasks with conflicting titles from local data and
   adds tasks without conflicting titles to local data
 - test 2 clients with the server
