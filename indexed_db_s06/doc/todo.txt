@@ -7,7 +7,7 @@ To Do
   -- Invalid CSS property name: font-smoothing
   -- Invalid CSS property name: -webkit-text-rendering
 
-- resolve:
+- resolve a sporadic error:
   Uncaught Error: Instance of 'Event'
   Exception: Instance of 'Event'
   
