@@ -9,6 +9,8 @@ To Do
 
 - improve model code as a true dartisan
 
+- use dartling for the model and its action/reaction events to update IndexedDB
+
 
 
 
