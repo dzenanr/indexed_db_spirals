@@ -79,8 +79,8 @@ class TasksStore {
   }
 
   Future loadDataFromServer(List<Map> jsonList) {
-    Tasks integratedTasks = _integrateDataFromServer(jsonList);
     Completer completer = new Completer();
+    Tasks integratedTasks = _integrateDataFromServer(jsonList);
     clear()
       .then((_) {
         int count = 0;

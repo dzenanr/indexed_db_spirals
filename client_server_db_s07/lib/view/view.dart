@@ -30,7 +30,6 @@ class TasksView {
       request.onReadyStateChange.listen((_) {
         if (request.readyState == HttpRequest.DONE &&
             request.status == 200) {
-          // Data saved OK.
           serverResponse = 'Server: ' + request.responseText;
         } else if (request.readyState == HttpRequest.DONE &&
             request.status == 0) {
