@@ -135,8 +135,7 @@ class TasksStore {
     var future = store.index(TasksDb.TITLE_INDEX).get(title);
     return future
       .then((taskMap) {
-        var task = new Task.fromJson(taskMap);
-        return task;
+        return new Task.fromJson(taskMap);
       });
   }
 
@@ -176,11 +175,11 @@ class TasksStore {
     int completedLength = completedTasks.length;
     for (var task in completedTasks) {
       remove(task)
-      .then((_) {
-        if (++count == completedLength) {
-          completer.complete();
-        }
-      });
+        .then((_) {
+          if (++count == completedLength) {
+            completer.complete();
+          }
+        });
     }
     return completer.future;
   }

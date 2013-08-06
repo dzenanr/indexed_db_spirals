@@ -1,0 +1,8 @@
+name: indexed_db
+version: 0.0.51
+author: Dzenan Ridjanovic <dzenanr@gmail.com>
+description: Spiral s05_1 to learn how to use Lawndart.
+homepage: http://ondart.me/
+dependencies:
+  browser: any
+  lawndart: any
