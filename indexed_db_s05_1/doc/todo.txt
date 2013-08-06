@@ -1,6 +1,6 @@
 To Do
 
-- test indexed db (IndexedDB uses window from dart:html)
+- test Lawndart db (Lawndart uses dart:html)
 
 - invalid CSS property names:
   -- Invalid CSS property name: -webkit-touch-callout
