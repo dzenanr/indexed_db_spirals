@@ -54,9 +54,9 @@ class Task {
 
 class Tasks {
   var _tasks = new List<Task>();
-  
-Tasks();
-  
+
+  Tasks();
+
   Tasks.fromJson(List<Map> jsonList) {
     for (var taskMap in jsonList) {
       add(new Task.fromJson(taskMap));
@@ -127,7 +127,7 @@ Tasks();
   bool remove(Task task) {
     return _tasks.remove(task);
   }
-  
+
   Tasks copy() {
     var copy = new Tasks();
     for (var task in this) {
