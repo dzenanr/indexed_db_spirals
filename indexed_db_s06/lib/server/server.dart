@@ -31,7 +31,7 @@ start() {
         default: defaultHandler(request);
       }
     },
-    onError: print);
+    onError: (e) => print(e));
     print('Listening for GET and POST on http://$HOST:$PORT');
   },
   onError: print);
