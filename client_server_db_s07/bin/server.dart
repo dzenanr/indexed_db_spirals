@@ -56,7 +56,7 @@ start() {
       }, onError: print);
     })
     .catchError(print)
-    .whenComplete(() => print('Server at http://$HOST:$PORT'));
+    .whenComplete(() => print('Listening for GET and POST on http://$HOST:$PORT'));
 }
 
 void handleGet(HttpRequest request) {
