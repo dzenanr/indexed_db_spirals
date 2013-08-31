@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'dart:json' as json;
+import 'dart:convert';
 
 import 'package:client_server/shared_model.dart';
 
@@ -67,7 +67,7 @@ void handleGet(HttpRequest request) {
   res.headers.contentType =
       new ContentType("application", "json", charset: 'utf-8');
   List<Map> jsonList = tasks.toJson();
-  String jsonString = json.stringify(jsonList);
+  String jsonString = JSON.encode(jsonList);
   print('JSON list in GET: ${jsonList}');
   res.write(jsonString);
   res.close();
@@ -77,7 +77,7 @@ void handlePost(HttpRequest request) {
   print('${request.method}: ${request.uri.path}');
   request.listen((List<int> buffer) {
     var jsonString = new String.fromCharCodes(buffer);
-    List<Map> jsonList = json.parse(jsonString);
+    List<Map> jsonList = JSON.decode(jsonString);
     print('JSON list in POST: ${jsonList}');
     _integrateDataFromClient(jsonList);
   },

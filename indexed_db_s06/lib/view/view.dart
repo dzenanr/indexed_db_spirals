@@ -54,7 +54,7 @@ class TasksView {
           serverResponse = 'Server: ' + request.responseText;
           print('JSON text from the server: ${jsonString}');
           if (jsonString != '') {
-            List<Map> jsonList = json.parse(jsonString);
+            List<Map> jsonList = JSON.decode(jsonString);
             print('JSON list from the server: ${jsonList}');
             _tasksStore.loadFromJson(jsonList)
               .then((_) {
