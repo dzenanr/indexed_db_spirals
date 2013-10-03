@@ -61,9 +61,9 @@ class TasksView {
                 _clearElements();
                 loadElements(tasks);
               })
-                .catchError((e) {
-                  print('error in loading data into IndexedDB from JSON list');
-                });
+              .catchError((e) {
+                print('error in loading data into IndexedDB from JSON list');
+              });
           }
         } else if (request.readyState == HttpRequest.DONE &&
             request.status == 0) {
