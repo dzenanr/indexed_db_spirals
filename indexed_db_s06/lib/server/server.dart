@@ -1,8 +1,7 @@
 library json_server;
 
 import 'dart:io';
-import 'dart:json' as json;
-
+import 'dart:convert';
 
 /*
  * Based on http://www.dartlang.org/articles/json-web-service/.
@@ -45,7 +44,7 @@ void handleGet(HttpRequest request) {
   res.headers.contentType =
       new ContentType("application", "json", charset: 'utf-8');
   if (jsonList != null) {
-    String jsonString = json.stringify(jsonList);
+    String jsonString = JSON.encode(jsonList);
     print('JSON list in GET: ${jsonList}');
     res.write(jsonString);
   }
@@ -56,7 +55,7 @@ void handlePost(HttpRequest request) {
   print('${request.method}: ${request.uri.path}');
   request.listen((List<int> buffer) {
     var jsonString = new String.fromCharCodes(buffer);
-    jsonList = json.parse(jsonString);
+    jsonList = JSON.decode(jsonString);
     print('JSON list in POST: ${jsonList}');
   },
   onError: print);
