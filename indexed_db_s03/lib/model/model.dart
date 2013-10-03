@@ -11,7 +11,7 @@ class Task {
   Task.fromDb(this.key, Map value):
     title = value['title'],
     updated = DateTime.parse(value['updated']),
-    completed = value['completed'] == 'true' ? true : false {
+    completed = value['completed'] == 'true' {
   }
 
   Map toDb() {

@@ -45,12 +45,10 @@ class TasksView {
 
     ButtonElement fromServer = query('#from-server');
     fromServer.onClick.listen((MouseEvent e) {
-      var request = new HttpRequest();
-      request.onReadyStateChange.listen((_) {
-        if (request.readyState == HttpRequest.DONE &&
-            request.status == 200) {
-          String jsonString = request.responseText;
-          serverResponse = 'Server: ' + request.responseText;
+      HttpRequest.getString('http://127.0.0.1:8080')
+        .then((result) {
+          String jsonString = result;
+          serverResponse = 'Server: ' + result;
           print('JSON text from the server: ${jsonString}');
           if (jsonString != '') {
             List<Map> jsonList = JSON.decode(jsonString);
@@ -65,16 +63,7 @@ class TasksView {
                 print('error in loading data into IndexedDB from JSON list');
               });
           }
-        } else if (request.readyState == HttpRequest.DONE &&
-            request.status == 0) {
-          // Status is 0...most likely the server isn't running.
-          serverResponse = 'No server';
-        }
-      });
-
-      var url = 'http://127.0.0.1:8080';
-      request.open('GET', url);
-      request.send('update-me');
+        });
     });
 
     InputElement newTask = query('#new-task');
