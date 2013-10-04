@@ -140,21 +140,15 @@ class TasksStore {
   }
 
   Future complete() {
-    Completer completer = new Completer();
-    int count = 0;
-    Tasks activeTasks = tasks.active;
-    int activeLength = activeTasks.length;
-    for (var task in activeTasks) {
-      task.completed = true;
-      task.updated = new DateTime.now();
-      update(task)
-        .then((_) {
-          if (++count == activeLength) {
-            completer.complete();
-          }
-        });
+    var futureList = new List<Future>();
+    for (var task in tasks) {
+      if (!task.completed) {
+        task.completed = true;
+        task.updated = new DateTime.now();
+        futureList.add(update(task));
+      }
     }
-    return completer.future;
+    return Future.wait(futureList);
   }
 
   Future remove(Task task) {
