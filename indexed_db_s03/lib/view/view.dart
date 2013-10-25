@@ -3,11 +3,11 @@ part of indexed_db;
 class TasksView {
   TasksStore _tasksStore;
 
-  InputElement _completeAllTasks = query('#complete-all-tasks');
-  Element _taskElements = query('#task-list');
-  Element _footer = query('.footer');
-  Element _activeTasksCount = query('#active-tasks-count');
-  ButtonElement _clearCompletedTasks = query('#clear-completed-tasks');
+  InputElement _completeAllTasks = querySelector('#complete-all-tasks');
+  Element _taskElements = querySelector('#task-list');
+  Element _footer = querySelector('.footer');
+  Element _activeTasksCount = querySelector('#active-tasks-count');
+  ButtonElement _clearCompletedTasks = querySelector('#clear-completed-tasks');
 
   TasksView(this._tasksStore) {
     _completeAllTasks.onClick.listen((Event e) {
@@ -16,7 +16,7 @@ class TasksView {
       loadElements(_tasksStore.tasks);
     });
 
-    InputElement newTask = query('#new-task');
+    InputElement newTask = querySelector('#new-task');
     newTask.onKeyPress.listen((KeyboardEvent e) {
       if (e.keyCode == KeyCode.ENTER) {
         var title = newTask.value.trim();
@@ -50,13 +50,13 @@ class TasksView {
 
   _addElement(Task task) {
     var taskElement = _newElement(task);
-    taskElement.query('.remove-task').onClick.listen((MouseEvent e) {
+    taskElement.querySelector('.remove-task').onClick.listen((MouseEvent e) {
       _tasksStore.remove(task).then((_) {
         _taskElements.nodes.remove(taskElement);
         _updateDisplay();
       });
     });
-    taskElement.query('.task-completed').onClick.listen((MouseEvent e) {
+    taskElement.querySelector('.task-completed').onClick.listen((MouseEvent e) {
       task.completed = !task.completed;
       task.updated = new DateTime.now();
       _tasksStore.update(task);

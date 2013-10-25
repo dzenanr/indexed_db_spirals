@@ -7,9 +7,9 @@ class TasksView {
   ButtonElement clearTasks;
 
   TasksView(this.tasksStore) {
-    _taskElements = query('#task-list');
+    _taskElements = querySelector('#task-list');
 
-    InputElement newTask = query('#new-task');
+    InputElement newTask = querySelector('#new-task');
     newTask.onKeyPress.listen((KeyboardEvent e) {
       if (e.keyCode == KeyCode.ENTER) {
         var title = newTask.value.trim();
@@ -22,7 +22,7 @@ class TasksView {
       }
     });
 
-    clearTasks = query('#clear-tasks');
+    clearTasks = querySelector('#clear-tasks');
     clearTasks.onClick.listen((MouseEvent e) {
       tasksStore.clear().then((_) {
         _clearElements();
@@ -44,13 +44,13 @@ class TasksView {
 
   _addElement(Task task) {
     var taskElement = _newElement(task);
-    taskElement.query('.remove-task').onClick.listen((MouseEvent e) {
+    taskElement.querySelector('.remove-task').onClick.listen((MouseEvent e) {
       tasksStore.remove(task).then((_) {
         _taskElements.nodes.remove(taskElement);
         _updateFooter();
       });
     });
-    taskElement.query('.task-completed').onClick.listen((MouseEvent e) {
+    taskElement.querySelector('.task-completed').onClick.listen((MouseEvent e) {
       task.completed = !task.completed;
       task.updated = new DateTime.now();
       tasksStore.update(task);

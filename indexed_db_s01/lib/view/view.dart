@@ -4,9 +4,9 @@ class TasksView {
   Element _taskElements;
 
   TasksView(TasksStore tasksStore) {
-    _taskElements = query('#task-list');
+    _taskElements = querySelector('#task-list');
 
-    InputElement newTask = query('#new-task');
+    InputElement newTask = querySelector('#new-task');
     newTask.onKeyPress.listen((KeyboardEvent e) {
       if (e.keyCode == KeyCode.ENTER) {
         var title = newTask.value.trim();
@@ -19,7 +19,7 @@ class TasksView {
       }
     });
 
-    ButtonElement clearTasks = query('#clear-tasks');
+    ButtonElement clearTasks = querySelector('#clear-tasks');
     clearTasks.onClick.listen((MouseEvent e) {
       tasksStore.clear().then((_) {
         _clearElements();

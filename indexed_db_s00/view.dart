@@ -28,13 +28,13 @@ clearElements() {
 }
 
 main() {
-  taskElements = query('#task-list');
+  taskElements = querySelector('#task-list');
   tasksStore = new TasksStore();
   tasksStore.open().then((_) {
     loadElements(tasksStore.tasks);
   });
 
-  InputElement newTask = query('#new-task');
+  InputElement newTask = querySelector('#new-task');
   newTask.onKeyPress.listen((KeyboardEvent e) {
     if (e.keyCode == KeyCode.ENTER) {
       var title = newTask.value.trim();
@@ -47,7 +47,7 @@ main() {
     }
   });
 
-  ButtonElement clear = query('#clear-tasks');
+  ButtonElement clear = querySelector('#clear-tasks');
   clear.onClick.listen((MouseEvent e) {
     tasksStore.clear().then((_) {
       clearElements();
