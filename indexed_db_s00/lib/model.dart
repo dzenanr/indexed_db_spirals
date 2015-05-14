@@ -1,6 +1,4 @@
-import 'dart:async';
-import 'dart:html';
-import 'dart:indexed_db';
+part of indexed_db;
 
 class Task {
   String title;

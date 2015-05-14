@@ -2,24 +2,33 @@ part of indexed_db;
 
 class Task { 
   String title;
-  bool completed = false;
-  DateTime updated = new DateTime.now();
+  bool isCompleted = false;
+  DateTime whenUpdated = new DateTime.now();
 
-  Task(this.title);
-
-  Task.fromDb(Map taskMap):
-    title = taskMap['title'],
-    updated = DateTime.parse(taskMap['updated']),
-    completed = taskMap['completed'] == 'true' ? true : false {
+  Task();
+  
+  Task.id(this.title);
+  
+  void fromJsonMap(Map<String, Object> jsonMap) {
+    title  = jsonMap['title'];
+    isCompleted = jsonMap['isCompleted'];
+    whenUpdated = DateTime.parse(jsonMap['whenUpdated']);
   }
-
-  Map toDb() {
-    return {
-      'title': title,
-      'completed': completed.toString(),
-      'updated': updated.toString()
-    };
+  
+  void fromJsonString(String jsonString) {
+    Map<String, Object> jsonMap = JSON.decode(jsonString);
+    fromJsonMap(jsonMap);
   }
+  
+  Map<String, Object> toJsonMap() {
+    var jsonMap = new Map<String, Object>();
+    jsonMap['title'] = title;
+    jsonMap['isCompleted'] = isCompleted;
+    jsonMap['whenUpdated'] = whenUpdated.toString();
+    return jsonMap;
+  }
+  
+  String toJsonString() => JSON.encode(toJsonMap());
 
   /**
    * Compares two tasks based on title.
@@ -31,6 +40,7 @@ class Task {
     if (title != null) {
       return title.compareTo(task.title);
     }
+    return null;
   }
 
   /**
@@ -55,7 +65,7 @@ class Tasks {
   Tasks get completed {
     var completed = new Tasks();
     for (var task in _tasks) {
-      if (task.completed) {
+      if (task.isCompleted) {
         completed.add(task);
       }
     }
@@ -65,7 +75,7 @@ class Tasks {
   Tasks get active {
     var active = new Tasks();
     for (var task in _tasks) {
-      if (!task.completed) {
+      if (!task.isCompleted) {
         active.add(task);
       }
     }
@@ -98,6 +108,7 @@ class Tasks {
         }
       }
     }
+    return null;
   }
   
   int count(String title) {

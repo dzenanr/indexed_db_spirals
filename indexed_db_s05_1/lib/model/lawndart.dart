@@ -4,26 +4,19 @@ class TasksDb {
   static const String TASKS_DB = 'todoDb';
   static const String TASKS_STORE = 'tasksStore';
   
-  var _store = new Store(TASKS_DB, TASKS_STORE);
+  var _store;
   TasksStore _tasksStore;
   
   TasksStore get tasksStore => _tasksStore;
   
-  Future open() {
-    Completer completer = new Completer();
-    _store.open()
-      .then((_) {
-        _loadDb()
-          .then((_) {
-            completer.complete();
-          });
-      });
-    return completer.future;
+  Future open() async {
+    _store = await Store.open(TASKS_DB, TASKS_STORE);
+    await _loadDb();
   }
   
-  Future _loadDb() {
+  Future _loadDb() async {
     _tasksStore = new TasksStore(_store);
-    return _tasksStore.load();
+    await _tasksStore.load();
   }
 }
 
@@ -36,121 +29,68 @@ class TasksStore {
   Tasks get tasks => _tasks;
   bool get isEmpty => tasks.length == 0;
   
-  Future load() {
-    Stream dataStream = _store.all();
-    return dataStream.forEach((taskMap) {      
-      var task = new Task.fromDb(taskMap);
+  Future load() async {
+    await for (var taskJsonString in _store.all()) {
+      var task = new Task();
+      task.fromJsonString(taskJsonString);
       tasks.add(task);
-    });
+    } 
   }
   
-  Future<Task> add(String title) {
-    Completer completer = new Completer();
-    var task = new Task(title);
-    find(title)
-      .then((foundTask) {
-        if (foundTask != null) {
-          completer.completeError('${title} title is not unique');
-        } else {
-          var taskMap = task.toDb();
-          _store.save(taskMap, task.title)
-            .then((_) {
-              tasks.add(task);
-              completer.complete();
-            });
-        }
-      });
-    return completer.future
-      .then((_) {
-        return task;
-      });
+  Future<Task> add(String title) async {
+    var task = new Task.id(title);
+    var foundTask = tasks.find(title);
+    if (foundTask == null) {
+      await _store.save(task.toJsonString(), task.title);
+      tasks.add(task);
+    } else {
+      task == null;
+      throw new Exception('${title} title is not unique.');
+    }
+    return task;
   }
   
-  Future update(Task task, String beforeTitle) {
-    Completer completer = new Completer();
-    var taskMap = task.toDb();
+  Future update(Task task, String beforeTitle) async {
     if (task.title == beforeTitle) {
-      _store.save(taskMap, task.title)
-        .then((_) {
-          completer.complete();
-        });
+      await _store.save(task.toJsonString(), task.title);
     } else {
       int count = tasks.count(task.title);
       if (count > 1) {
-        completer.completeError('${task} title is not unique');
+        throw new Exception('${task} title is not unique.');
       } else {
-        _store.removeByKey(beforeTitle)
-          .then((_) {
-            _store.save(taskMap, task.title)
-              .then((_) {
-                completer.complete();
-              });
-          });    
+        await _store.removeByKey(beforeTitle);
+        await _store.save(task.toJsonString(), task.title);  
       }
     }   
-    return completer.future;
   }
   
-  Future<Task> find(String title) {
-    var future = _store.getByKey(title);
-    return future
-      .then((taskMap) {
-        return tasks.find(title);
-      })
-      .catchError((e) {
-        return null;
-      });
-  }
-  
-  Future complete() {
-    Completer completer = new Completer();
-    int count = 0;
+  Future completeActive() async {
     Tasks activeTasks = tasks.active;
-    int activeLength = activeTasks.length;
     for (var task in activeTasks) {
-      task.completed = true;
-      task.updated = new DateTime.now();
-      update(task, task.title)
-        .then((_) {
-          if (++count == activeLength) {
-            completer.complete();
-          }
-        });
+      task.isCompleted = true;
+      task.whenUpdated = new DateTime.now();
+      await update(task, task.title);  
     }
-    return completer.future;
   }
 
-  Future remove(Task task) {
-    var future =_store.removeByKey(task.title);
-    return future
-      .then((_) {
-        task.title = null;
-        tasks.remove(task);
-      });
+  Future<bool> remove(Task task) async {
+    await _store.removeByKey(task.title);
+    return tasks.remove(task);
   }
   
-  Future removeCompleted() {
-    Completer completer = new Completer();
-    int count = 0;
+  Future<bool> removeCompleted() async {
+    bool removedAllCompleted = true;
     Tasks completedTasks = tasks.completed;
-    int completedLength = completedTasks.length;
     for (var task in completedTasks) {
-      remove(task)
-        .then((_) {
-          if (++count == completedLength) {
-            completer.complete();
-          }
-        });
+      if (! await remove(task)) {
+        removedAllCompleted = false;
+      }
     }
-    return completer.future;
+    return removedAllCompleted;
   }
 
-  Future clear() {
-    var future = _store.nuke();
-    return future
-      .then((_) {
-        tasks.clear();
-      });
-  }
-  
+  Future clear() async {
+    await _store.nuke();
+    tasks.clear();
+  }  
 }

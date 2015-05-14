@@ -6,5 +6,4 @@ main() {
   tasksStore.open().then((_) {
     tasksView.loadElements(tasksStore.tasks);
   });
-
 }

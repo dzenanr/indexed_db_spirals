@@ -15,38 +15,38 @@ class TasksView {
   TasksView(this._tasksStore) {
     window.onHashChange.listen((e) => _updateFilter());
 
-    _completeAllTasks.onClick.listen((Event e) {
-      _tasksStore.complete();
+    _completeAllTasks.onClick.listen((Event e) async {
+      await _tasksStore.completeActive();
       _clearElements();
       loadElements(_tasksStore.tasks);
       _updateFilter();
     });
 
     InputElement newTask = querySelector('#new-task');
-    newTask.onKeyPress.listen((KeyboardEvent e) {
+    newTask.onKeyPress.listen((KeyboardEvent e) async {
       if (e.keyCode == KeyCode.ENTER) {
         var title = newTask.value.trim();
         if (title != '') {
-          _tasksStore.add(title)
-            .then((task) {
+          try {
+            var task = await _tasksStore.add(title);
+            if (task != null) {
               _addElement(task);
               newTask.value = '';
               _updateFilter();
-            })
-            .catchError((e) {
-              newTask.value = '${title} : title not unique';
-              newTask.select();
-            });
+            }
+          } catch(e) { 
+            newTask.value = '${e}';
+            newTask.select();
+          }
         }
       }
     });
 
-    _clearCompletedTasks.onClick.listen((MouseEvent e) {
-      _tasksStore.removeCompleted()
-        .then((_) {
-          _clearElements();
-          loadElements(_tasksStore.tasks);
-        });
+    _clearCompletedTasks.onClick.listen((MouseEvent e) async {
+      if (await _tasksStore.removeCompleted()) {
+        _clearElements();
+        loadElements(_tasksStore.tasks);
+      }
     });
   }
 
@@ -54,7 +54,7 @@ class TasksView {
     return new Element.html('''
       <li>
         <input class='task-completed' type='checkbox'
-          ${task.completed ? 'checked' : ''}>
+          ${task.isCompleted ? 'checked' : ''}>
         <button class='task-button remove-task'>X</button>
         <label class='task-title'>${task.title}</label>
         <input class='edit-title' value='${task.title}'>
@@ -68,48 +68,48 @@ class TasksView {
     Element title = taskElement.querySelector('.task-title');
     InputElement editTitle = taskElement.querySelector('.edit-title');
     editTitle.hidden = true;
+    
     title.onDoubleClick.listen((MouseEvent e) {
       title.hidden = true;
       editTitle.hidden = false;
       editTitle.select();
     });
-    editTitle.onKeyPress.listen((KeyboardEvent e) {
+    
+    editTitle.onKeyPress.listen((KeyboardEvent e) async {
       if (e.keyCode == KeyCode.ENTER) {
         var value = editTitle.value.trim();
         if (value != '') {
           String beforeTitle = task.title;
-          DateTime beforeUpdated = task.updated;
+          DateTime beforeUpdated = task.whenUpdated;
           task.title = value;
-          task.updated = new DateTime.now();
-          _tasksStore.update(task, beforeTitle)
-            .then((_) {
-              title.text = value;
-              title.hidden = false;
-              editTitle.hidden = true;
-              _updateDisplay();
-            })
-            .catchError((e) {
-              task.title = beforeTitle;
-              task.updated = beforeUpdated;
-              editTitle.value =
-                '${title.text} (old) ${editTitle.value} (new) : title not unique';
-              editTitle.select();
-            });
+          task.whenUpdated = new DateTime.now();
+          try {
+            await _tasksStore.update(task, beforeTitle);
+            title.text = value;
+            title.hidden = false;
+            editTitle.hidden = true;
+            _updateDisplay();  
+          } catch(e) {
+            task.title = beforeTitle;
+            task.whenUpdated = beforeUpdated;
+            editTitle.value =
+              '${title.text} (old) ${editTitle.value} (new) : title not unique';
+            editTitle.select();
+          }
         }
       }
     });
 
-    taskElement.querySelector('.remove-task').onClick.listen((MouseEvent e) {
-      _tasksStore.remove(task)
-        .then((_) {
-          _taskElements.nodes.remove(taskElement);
-          _updateDisplay();
-        });
+    taskElement.querySelector('.remove-task').onClick.listen((MouseEvent e) async {
+      if (await _tasksStore.remove(task)) {
+        _taskElements.nodes.remove(taskElement);
+        _updateDisplay();
+      }
     });
 
     taskElement.querySelector('.task-completed').onClick.listen((MouseEvent e) {
-      task.completed = !task.completed;
-      task.updated = new DateTime.now();
+      task.isCompleted = !task.isCompleted;
+      task.whenUpdated = new DateTime.now();
       _tasksStore.update(task, task.title);
       _updateDisplay();
       _updateFilter();

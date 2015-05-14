@@ -1,0 +1,3 @@
+Changes
+
++ add lib and web folders with the indexed_db library

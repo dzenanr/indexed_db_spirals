@@ -1,5 +1,5 @@
 import 'dart:html';
-import 'model.dart';
+import 'package:indexed_db/indexed_db.dart';
 
 Element taskElements;
 TasksStore tasksStore;
