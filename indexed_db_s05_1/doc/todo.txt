@@ -1,8 +1,5 @@
 To Do
 
-- create the IdException class (in the new exception.dart file in lib/model) that extends Exception and 
-  use it in the add and update methods of the TasksStore class in lib/model/lawndart.dart
-
 - test Lawndart db (Lawndart uses dart:html)
 
 - invalid CSS property names:

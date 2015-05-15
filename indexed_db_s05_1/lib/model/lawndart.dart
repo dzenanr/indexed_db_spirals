@@ -45,7 +45,7 @@ class TasksStore {
       tasks.add(task);
     } else {
       task == null;
-      throw new Exception('${title} title is not unique.');
+      throw new IdException('${title} title is not unique.');
     }
     return task;
   }
@@ -56,7 +56,7 @@ class TasksStore {
     } else {
       int count = tasks.count(task.title);
       if (count > 1) {
-        throw new Exception('${task} title is not unique.');
+        throw new IdException('${task} title is not unique.');
       } else {
         await _store.removeByKey(beforeTitle);
         await _store.save(task.toJsonString(), task.title);  

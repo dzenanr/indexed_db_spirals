@@ -6,6 +6,7 @@ import 'dart:html';
 
 import 'package:lawndart/lawndart.dart';
 
+part 'model/exception.dart';
 part 'model/lawndart.dart';
 part 'model/model.dart';
 part 'view/view.dart';

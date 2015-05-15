@@ -1,5 +1,8 @@
 Done
 
++ create the IdException class (in the new exception.dart file in lib/model) that extends Exception and 
+  use it in the add and update methods of the TasksStore class in lib/model/lawndart.dart
+
 + Lawndart
 
 http://blog.sethladd.com/2013/02/lawndart-helps-you-write-offline-web.html
